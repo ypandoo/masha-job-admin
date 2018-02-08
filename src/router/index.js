@@ -64,6 +64,20 @@ export default new Router({
 
 export const asyncRouterMap = [
   {
+    path: '/category',
+    component: Layout,
+    redirect: 'noredirect',
+    name: 'category',
+    meta: {
+      title: 'category',
+      icon: 'form'
+    },
+    children: [
+      { path: 'create-category', component: _import('category/create'), name: 'createCategory', meta: { title: 'createCategory', icon: 'table' }},
+      { path: 'edit-category', component: _import('category/edit'), name: 'editCategory', meta: { title: 'editCategory', icon: 'table' }}
+    ]
+  },
+  {
     path: '/permission',
     component: Layout,
     redirect: '/permission/index',
