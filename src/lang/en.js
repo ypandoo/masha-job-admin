@@ -1,6 +1,9 @@
 export default {
   route: {
     dashboard: 'Dashboard',
+    category: 'Category',
+    createCategory: 'Create Catetory',
+    editCategory: 'Edit Category',
     introduction: 'Introduction',
     documentation: 'Documentation',
     permission: 'Permission',

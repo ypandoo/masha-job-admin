@@ -1,48 +1,51 @@
+var express = require('express')
+var path = require('path')
+var logger = require('morgan')
+var cookieParser = require('cookie-parser')
+var bodyParser = require('body-parser')
+var routes = require('./routes/index')
+var user = require('./routes/user')
+var category = require('./routes/category')
 
-
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-
-var routes = require('./routes/index');
-var user = require('./routes/user');
-
-var app = express();
+var app = express()
 var cors = require('cors')
 app.use(cors())
 
-var env = process.env.NODE_ENV || 'development';
-app.locals.ENV = env;
-app.locals.ENV_DEVELOPMENT = env == 'development';
+var env = process.env.NODE_ENV || 'development'
+app.locals.ENV = env
+app.locals.ENV_DEVELOPMENT = env === 'development'
 
 // view engine setup
 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'ejs')
 
 // app.use(favicon(__dirname + '/public/img/favicon.ico'));
-app.use(logger('dev'));
-app.use(bodyParser.json());
+app.use(logger('dev'))
+app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
   extended: true
-}));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+}))
+app.use(cookieParser())
+app.use(express.static(path.join(__dirname, 'public')))
 
-app.use('/', routes);
-app.use('/user', user);
+app.use('/', routes)
+app.use('/user', user)
+app.use('/category', category)
 
-/// catch 404 and forward to error handler
+// db
+var mongoose = require('mongoose')
+require('express-mongoose')
+mongoose.connect('mongodb://localhost/pyonex')
+
+// catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-});
+    var err = new Error('Not Found')
+    err.status = 404
+    next(err)
+})
 
-/// error handlers
+// error handlers
 
 // development error handler
 // will print stacktrace
@@ -54,8 +57,8 @@ if (app.get('env') === 'development') {
             message: err.message,
             error: err,
             title: 'error'
-        });
-    });
+        })
+    })
 }
 
 // production error handler
@@ -66,8 +69,7 @@ app.use(function(err, req, res, next) {
         message: err.message,
         error: {},
         title: 'error'
-    });
-});
+    })
+})
 
-
-module.exports = app;
+module.exports = app

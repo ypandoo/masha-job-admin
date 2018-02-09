@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import ArticleDetail from './components/ArticleDetail'
+import CategoryDetail from './components/CategoryDetail'
 
 export default {
   name: 'editForm',
-  components: { ArticleDetail }
+  components: { CategoryDetail }
 }
 </script>
 

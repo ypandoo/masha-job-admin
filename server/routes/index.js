@@ -18,7 +18,7 @@ router.get('/getToken', function(req, res) {
   var putPolicy = new qiniu.rs.PutPolicy(options)
   var uploadToken = putPolicy.uploadToken(mac)
 
-  res.json({ 'qiniu_token': uploadToken, 'qiniu_key': uid, 'qiniu_url': 'p3rsb7zg2.bkt.clouddn.com/' + uid })
+  res.json({ 'qiniu_token': uploadToken, 'qiniu_key': uid, 'qiniu_url': 'http://p3ts1f5ty.bkt.clouddn.com/' + uid })
 })
 
 module.exports = router

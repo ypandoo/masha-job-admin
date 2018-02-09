@@ -1,6 +1,6 @@
 <template>
   <div class="createPost-container">
-    <el-form class="form-container" :model="postForm" :rules="rules" ref="postForm">
+    <el-form class="form-container" :model="postForm" :rules="rules" ref="postForm" label-position="top">
 
       <sticky :className="'sub-navbar '+postForm.status">
         <template v-if="fetchSuccess">
@@ -84,8 +84,8 @@
 
                 <el-col :span="8">
                   <el-tooltip class="item" effect="dark" content="分类名称" placement="top">
-                    <el-form-item label-width="100px" label="分类名称:" class="postInfo-container-item">
-                      <el-input placeholder="分类名称" style='min-width:150px;' v-model="postForm.source_name">
+                    <el-form-item label-width="100px" label="分类名称:" class="postInfo-container-item" prop="title">
+                      <el-input placeholder="分类名称" style='min-width:150px;' v-model="postForm.title" >
                       </el-input>
                     </el-form-item>
                   </el-tooltip>
@@ -102,8 +102,8 @@
           </el-col>
         </el-row>
 
-        <el-form-item style="margin-bottom: 40px;" label-width="100px" label="分类简介:">
-          <el-input type="textarea" class="article-textarea" :rows="1" autosize placeholder="请输入内容" v-model="postForm.content_short">
+        <el-form-item style="margin-bottom: 40px;" label-width="100px" label="分类简介:" prop="content_short">
+          <el-input type="textarea" class="article-textarea" :rows="1" autosize placeholder="请输入内容" v-model="postForm.content_short" >
           </el-input>
           <span class="word-counter" v-show="contentShortLength">{{contentShortLength}}字</span>
         </el-form-item>
@@ -113,7 +113,9 @@
         </div> -->
 
         <div style="margin-bottom: 20px;">
+          <el-form-item label-width="100px" label="上传图片或文件:" prop="image_uri">
           <Upload v-model="postForm.image_uri"></Upload>
+          </el-form-item>
         </div>
       </div>
     </el-form>
@@ -129,7 +131,7 @@ import Multiselect from 'vue-multiselect'// 使用的一个多选框组件，ele
 import 'vue-multiselect/dist/vue-multiselect.min.css'// 多选框组件css
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { validateURL } from '@/utils/validate'
-import { fetchArticle } from '@/api/article'
+import { fetchList, addCategory } from '@/api/category'
 import { userSearch } from '@/api/remoteSearch'
 
 const defaultForm = {
@@ -147,7 +149,7 @@ const defaultForm = {
 }
 
 export default {
-  name: 'articleDetail',
+  name: 'categoryDetail',
   components: { Tinymce, MDinput, Upload, Multiselect, Sticky },
   props: {
     isEdit: {
@@ -159,7 +161,7 @@ export default {
     const validateRequire = (rule, value, callback) => {
       if (value === '') {
         this.$message({
-          message: rule.field + '为必传项',
+          message: '内容未填写完整',
           type: 'error'
         })
         callback(null)
@@ -193,10 +195,10 @@ export default {
         { key: 'c-platform', name: 'c-platform' }
       ],
       rules: {
-        image_uri: [{ validator: validateRequire }],
-        title: [{ validator: validateRequire }],
-        content: [{ validator: validateRequire }],
-        source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
+        image_uri: [{ required: true, validator: validateRequire }],
+        title: [{ required: true, validator: validateRequire }],
+        content_short: [{ required: true, validator: validateRequire }]
+        // source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
       }
     }
   },
@@ -214,27 +216,51 @@ export default {
   },
   methods: {
     fetchData() {
-      fetchArticle().then(response => {
-        this.postForm = response.data
-      }).catch(err => {
-        this.fetchSuccess = false
-        console.log(err)
-      })
+      // fetchArticle().then(response => {
+      //   this.postForm = response.data
+      // }).catch(err => {
+      //   this.fetchSuccess = false
+      //   console.log(err)
+      // })
     },
     submitForm() {
-      this.postForm.display_time = parseInt(this.display_time / 1000)
+      // this.postForm.display_time = parseInt(this.display_time / 1000)
       console.log(this.postForm)
+      var self = this
       this.$refs.postForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$notify({
-            title: '成功',
-            message: '发布文章成功',
-            type: 'success',
-            duration: 2000
+          const submitData = {
+            'title': self.postForm.title,
+            'desc': self.postForm.content_short,
+            'url': self.postForm.image_uri
+          }
+
+          // add new category
+          addCategory(submitData).then(response => {
+            if (response.data.error_code == 0) {
+              this.$notify({
+                title: '成功',
+                message: '分类创建成功',
+                type: 'success',
+                duration: 2000
+              })
+              this.postForm.status = 'published'
+            } else {
+              this.$message({
+                message: response.data.msg,
+                type: 'warning'
+              })
+            }
+            this.loading = false
+          }).catch(err => {
+            this.$message({
+              message: '分类创建失败',
+              type: 'warning'
+            })
+            this.loading = false
+            console.log(err)
           })
-          this.postForm.status = 'published'
-          this.loading = false
         } else {
           console.log('error submit!!')
           return false
@@ -309,6 +335,10 @@ export default {
       right: -10px;
       top: 0px;
     }
+  }
+
+  label{
+    text-align: left !important;
   }
 </style>
 

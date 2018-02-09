@@ -8,9 +8,9 @@
 		<div class="image-preview image-app-preview">
 			<div class="image-preview-wrapper" v-show="imageUrl.length>1">
 				<img :src="imageUrl">
-				<div class="image-preview-action">
+				<!-- <div class="image-preview-action">
 					<i @click="rmImage" class="el-icon-delete"></i>
-				</div>
+				</div> -->
 			</div>
 		</div>
 		<!-- <div class="image-preview">
@@ -51,7 +51,7 @@ export default {
       this.$emit('input', val)
     },
     handleImageScucess(file) {
-      this.emitInput(file.files.file)
+      this.emitInput(this.tempUrl)
     },
     beforeUpload() {
       const _self = this
@@ -127,7 +127,7 @@ export default {
 	}
 	.image-app-preview {
 		width: 320px;
-		height: 180px;
+		height: 200px;
 		position: relative;
 		border: 1px dashed #d9d9d9;
 		float: left;
