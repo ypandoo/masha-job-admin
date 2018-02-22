@@ -2,8 +2,8 @@ import request from '@/utils/request'
 
 export function fetchList(query) {
   return request({
-    url: '/article/list',
-    method: 'get',
+    url: 'http://localhost:3000/category/list',
+    method: 'post',
     params: query
   })
 }

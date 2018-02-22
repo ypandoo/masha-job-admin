@@ -74,7 +74,8 @@ export const asyncRouterMap = [
     },
     children: [
       { path: 'create-category', component: _import('category/create'), name: 'createCategory', meta: { title: 'createCategory', icon: 'table' }},
-      { path: 'edit-category', component: _import('category/edit'), name: 'editCategory', meta: { title: 'editCategory', icon: 'table' }}
+      { path: 'edit-category/:id', component: _import('category/edit'), name: 'editCategory', meta: { title: 'editCategory', icon: 'table' }},
+      { path: 'list', component: _import('category/categoryList'), name: 'categoryList', meta: { title: 'categoryList', icon: 'table' }}
     ]
   },
   {

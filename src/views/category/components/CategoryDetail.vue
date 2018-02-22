@@ -131,7 +131,7 @@ import Multiselect from 'vue-multiselect'// 使用的一个多选框组件，ele
 import 'vue-multiselect/dist/vue-multiselect.min.css'// 多选框组件css
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { validateURL } from '@/utils/validate'
-import { fetchList, addCategory } from '@/api/category'
+import { fetchCategory, addCategory, updateCategory } from '@/api/category'
 import { userSearch } from '@/api/remoteSearch'
 
 const defaultForm = {
@@ -216,12 +216,14 @@ export default {
   },
   methods: {
     fetchData() {
-      // fetchArticle().then(response => {
-      //   this.postForm = response.data
-      // }).catch(err => {
-      //   this.fetchSuccess = false
-      //   console.log(err)
-      // })
+      fetchCategory({ id: this.$route.params.id }).then(response => {
+        this.postForm.title = response.data.item.title
+        this.postForm.image_uri = response.data.item.url
+        this.postForm.content_short = response.data.item.desc
+      }).catch(err => {
+        this.fetchSuccess = false
+        console.log(err)
+      })
     },
     submitForm() {
       // this.postForm.display_time = parseInt(this.display_time / 1000)
@@ -230,37 +232,72 @@ export default {
       this.$refs.postForm.validate(valid => {
         if (valid) {
           this.loading = true
-          const submitData = {
-            'title': self.postForm.title,
-            'desc': self.postForm.content_short,
-            'url': self.postForm.image_uri
-          }
+          if (this.isEdit) {
+            const submitData = {
+              'title': self.postForm.title,
+              'desc': self.postForm.content_short,
+              'url': self.postForm.image_uri,
+              'id': this.$route.params.id
+            }
 
-          // add new category
-          addCategory(submitData).then(response => {
-            if (response.data.error_code == 0) {
-              this.$notify({
-                title: '成功',
-                message: '分类创建成功',
-                type: 'success',
-                duration: 2000
-              })
-              this.postForm.status = 'published'
-            } else {
+            // add new category
+            updateCategory(submitData).then(response => {
+              if (response.data.error_code === 0) {
+                this.$notify({
+                  title: '成功',
+                  message: '分类修改成功',
+                  type: 'success',
+                  duration: 2000
+                })
+                this.postForm.status = 'published'
+              } else {
+                this.$message({
+                  message: response.data.msg,
+                  type: 'warning'
+                })
+              }
+              this.loading = false
+            }).catch(err => {
               this.$message({
-                message: response.data.msg,
+                message: '分类修改失败',
                 type: 'warning'
               })
-            }
-            this.loading = false
-          }).catch(err => {
-            this.$message({
-              message: '分类创建失败',
-              type: 'warning'
+              this.loading = false
+              console.log(err)
             })
-            this.loading = false
-            console.log(err)
-          })
+          } else {
+            const submitData = {
+              'title': self.postForm.title,
+              'desc': self.postForm.content_short,
+              'url': self.postForm.image_uri
+            }
+
+            // add new category
+            addCategory(submitData).then(response => {
+              if (response.data.error_code === 0) {
+                this.$notify({
+                  title: '成功',
+                  message: '分类创建成功',
+                  type: 'success',
+                  duration: 2000
+                })
+                this.postForm.status = 'published'
+              } else {
+                this.$message({
+                  message: response.data.msg,
+                  type: 'warning'
+                })
+              }
+              this.loading = false
+            }).catch(err => {
+              this.$message({
+                message: '分类创建失败',
+                type: 'warning'
+              })
+              this.loading = false
+              console.log(err)
+            })
+          }
         } else {
           console.log('error submit!!')
           return false
