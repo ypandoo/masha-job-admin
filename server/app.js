@@ -6,6 +6,7 @@ var bodyParser = require('body-parser')
 var routes = require('./routes/index')
 var user = require('./routes/user')
 var category = require('./routes/category')
+var article = require('./routes/article')
 
 var app = express()
 var cors = require('cors')
@@ -32,6 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/', routes)
 app.use('/user', user)
 app.use('/category', category)
+app.use('/article', article)
 
 // db
 var mongoose = require('mongoose')
