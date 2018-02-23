@@ -5,6 +5,12 @@ export default {
     createCategory: 'Create Catetory',
     editCategory: 'Edit Category',
     categoryList: 'Category List',
+
+    article: 'Article',
+    createArticle: 'Create Article',
+    editArticle: 'Edit Article',
+    articleList: 'Article List',
+
     introduction: 'Introduction',
     documentation: 'Documentation',
     permission: 'Permission',

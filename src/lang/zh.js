@@ -5,6 +5,12 @@ export default {
     createCategory: '创建分类',
     editCategory: '编辑分类',
     categoryList: '分类列表',
+
+    article: '文章',
+    createArticle: '创建文章',
+    editArticle: '编辑文章',
+    articleList: '文章列表',
+
     introduction: '简述',
     documentation: '文档',
     permission: '权限测试页',
