@@ -10,7 +10,8 @@ var _Category = new Schema({
   title: String,
   desc: String,
   sort: { type: Number, default: 100 },
-  url: String
+  url: String,
+  show: {type: Boolean, default: true}
 })
 
 _Category.plugin(timestamps)

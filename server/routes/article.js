@@ -115,7 +115,7 @@ router.post('/list', function(req, res) {
   }
 
   var type = req.body.type
-  var query = {};
+  var query = {deleted: false};
   if(typeof type != 'undefined' && type != ""){
     Object.assign(query, {type: type});
   }
@@ -146,6 +146,24 @@ router.post('/findOne', function(req, res) {
       res.json({ error_code: 0, msg: 'success', item: item })
     } else {
       res.json({ error_code: 1, msg: 'query one article failed', item: {}})
+    }
+  })
+})
+
+router.post('/delete', function(req, res) {
+  const id = req.body.id
+  if (!id) {
+    res.json({ error_code: 1, msg: 'id is empty' })
+    return
+  }
+
+  Article.findOneAndUpdate({ _id: id }, {
+    deleted: true,
+  }, function(err, docs) {
+    if (!err) {
+      res.json({ error_code: 0, msg: 'success' })
+    } else {
+      res.json({ error_code: 1, msg: 'delete article failed', data: {}})
     }
   })
 })

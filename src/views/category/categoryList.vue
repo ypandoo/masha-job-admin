@@ -72,7 +72,7 @@
       </el-table-column> -->
       <el-table-column align="center" :label="$t('table.actions')" width="230" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <router-link :to="'edit-category/'+scope.row._id" >编辑</router-link>
+          <router-link :to="'edit-category/'+scope.row._id" class="link-type">编辑</router-link>
           <!-- <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button> -->
           <!-- <el-button v-if="scope.row.status!='published'" size="mini" type="success" @click="handleModifyStatus(scope.row,'published')">{{$t('table.publish')}}
           </el-button>
@@ -237,6 +237,7 @@ export default {
       this.getList()
     },
     handleSizeChange(val) {
+      this.listQuery.page = 1
       this.listQuery.limit = val
       this.getList()
     },

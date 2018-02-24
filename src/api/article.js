@@ -1,26 +1,18 @@
 import request from '@/utils/request'
 
-export function fetchList(query) {
+export function fetchList(data) {
   return request({
     url: 'http://localhost:3000/article/list',
     method: 'post',
-    params: query
+    data
   })
 }
 
-export function fetchArticle(query) {
+export function fetchArticle(data) {
   return request({
     url: 'http://localhost:3000/article/findOne',
     method: 'post',
-    params: query
-  })
-}
-
-export function fetchPv(pv) {
-  return request({
-    url: '/article/pv',
-    method: 'get',
-    params: { pv }
+    data
   })
 }
 
@@ -35,6 +27,14 @@ export function createArticle(data) {
 export function updateArticle(data) {
   return request({
     url: 'http://localhost:3000/article/update',
+    method: 'post',
+    data
+  })
+}
+
+export function deleteArticle(data) {
+  return request({
+    url: 'http://localhost:3000/article/delete',
     method: 'post',
     data
   })

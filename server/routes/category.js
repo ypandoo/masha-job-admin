@@ -96,4 +96,28 @@ router.post('/findOne', function(req, res) {
   })
 })
 
+router.post('/show', function(req, res) {
+  const id = req.body.id
+  if (!id) {
+    res.json({ error_code: 1, msg: 'id is empty' })
+    return
+  }
+
+  const show = req.body.show
+  if (!show) {
+    res.json({ error_code: 1, msg: 'show is empty' })
+    return
+  }
+
+  Category.findOneAndUpdate({ _id: id }, {
+    show: parseInt(show) ? true : false,
+  }, function(err, docs) {
+    if (!err) {
+      res.json({ error_code: 0, msg: 'success' })
+    } else {
+      res.json({ error_code: 1, msg: 'change show status of category failed'})
+    }
+  })
+})
+
 module.exports = router

@@ -31,3 +31,11 @@ export function fetchCategory(data) {
     data
   })
 }
+
+export function showCategory(data) {
+  return request({
+    url: 'http://localhost:3000/category/show',
+    method: 'post',
+    data
+  })
+}
