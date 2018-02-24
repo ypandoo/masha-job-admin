@@ -64,12 +64,12 @@
       <div class="createPost-main-container">
         <el-row>
           <el-col :span="21">
-            <!-- <el-form-item style="margin-bottom: 40px;" prop="title">
+            <el-form-item style="margin-bottom: 40px;" prop="title">
               <MDinput name="name" v-model="postForm.title" required :maxlength="100">
                 标题
               </MDinput>
               <span v-show="postForm.title.length>=26" class='title-prompt'>app可能会显示不全</span>
-            </el-form-item> -->
+            </el-form-item>
 
             <div class="postInfo-container">
               <el-row>
@@ -83,12 +83,21 @@
                 </el-col> -->
 
                 <el-col :span="8">
-                  <el-tooltip class="item" effect="dark" content="分类名称" placement="top">
-                    <el-form-item label-width="100px" label="分类名称:" class="postInfo-container-item" prop="title">
-                      <el-input placeholder="分类名称" style='min-width:150px;' v-model="postForm.title" >
+                  <el-tooltip class="item" effect="dark" content="作者" placement="top">
+                    <el-form-item label-width="100px" label="作者:" class="postInfo-container-item" prop="author">
+                      <el-input placeholder="作者" style='min-width:150px;' v-model="postForm.author" >
                       </el-input>
                     </el-form-item>
                   </el-tooltip>
+                </el-col>
+
+                <el-col :span="8">
+                  <el-form-item :label="$t('table.type')" prop ="type" >
+                    <el-select class="filter-item" v-model="postForm.type" clearable placeholder="请选择">
+                      <el-option v-for="item in  typeOptions" :key="item._id" :label="item.title" :value="item._id">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
                 </el-col>
 
                 <!-- <el-col :span="8">
@@ -102,19 +111,23 @@
           </el-col>
         </el-row>
 
-        <el-form-item style="margin-bottom: 40px;" label-width="100px" label="分类简介:" prop="content_short">
+        <el-form-item style="margin-bottom: 40px;" label-width="100px" label="文章简介:" prop="content_short">
           <el-input type="textarea" class="article-textarea" :rows="1" autosize placeholder="请输入内容" v-model="postForm.content_short" >
           </el-input>
           <span class="word-counter" v-show="contentShortLength">{{contentShortLength}}字</span>
         </el-form-item>
 
-        <!-- <div class="editor-container">
-          <tinymce :height=400 ref="editor" v-model="postForm.content"></tinymce>
-        </div> -->
 
         <div style="margin-bottom: 20px;">
-          <el-form-item label-width="100px" label="上传图片或文件:" prop="image_uri">
+          <el-form-item label-width="100px" label="上传附件:" prop="image_uri">
           <Upload v-model="postForm.image_uri"></Upload>
+          </el-form-item>
+        </div>
+
+
+        <div class="editor-container">
+          <el-form-item label-width="100px" label="文章正文:" prop="content">
+          <tinymce :height=500 ref="editor" v-model="postForm.content"></tinymce>
           </el-form-item>
         </div>
       </div>
@@ -131,7 +144,8 @@ import Multiselect from 'vue-multiselect'// 使用的一个多选框组件，ele
 import 'vue-multiselect/dist/vue-multiselect.min.css'// 多选框组件css
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { validateURL } from '@/utils/validate'
-import { fetchArticle, addArticle, updateArticle } from '@/api/article'
+import { fetchArticle, createArticle, updateArticle } from '@/api/article'
+import { fetchList as fetchCategory} from '@/api/category'
 import { userSearch } from '@/api/remoteSearch'
 
 const defaultForm = {
@@ -141,6 +155,8 @@ const defaultForm = {
   content_short: '', // 文章摘要
   source_uri: '', // 文章外链
   image_uri: '', // 文章图片
+  type: '',
+  author: '',
   source_name: '', // 文章外部作者
   display_time: undefined, // 前台展示时间
   id: undefined,
@@ -194,9 +210,13 @@ export default {
         { key: 'b-platform', name: 'b-platform' },
         { key: 'c-platform', name: 'c-platform' }
       ],
+      typeOptions: {},
       rules: {
-        image_uri: [{ required: true, validator: validateRequire }],
+        // image_uri: [{ required: true, validator: validateRequire }],
         title: [{ required: true, validator: validateRequire }],
+        author: [{ required: true, validator: validateRequire }],
+        type: [{ required: true, validator: validateRequire }],
+        content: [{ required: true, validator: validateRequire }],
         content_short: [{ required: true, validator: validateRequire }]
         // source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
       }
@@ -208,22 +228,29 @@ export default {
     }
   },
   created() {
-    if (this.isEdit) {
-      this.fetchData()
-    } else {
       this.postForm = Object.assign({}, defaultForm)
-    }
-  },
-  methods: {
-    fetchData() {
-      fetchArticle({ id: this.$route.params.id }).then(response => {
-        this.postForm.title = response.data.item.title
-        this.postForm.image_uri = response.data.item.url
-        this.postForm.content_short = response.data.item.desc
+      fetchCategory({limit:100, page:0}).then(response => {
+        this.typeOptions = response.data.items;
+        if (this.isEdit) {
+          this.fetchData()
+        } 
       }).catch(err => {
         this.fetchSuccess = false
         console.log(err)
       })
+
+
+  },
+  methods: {
+    fetchData() {
+        fetchArticle({ id: this.$route.params.id }).then(response => {
+          this.postForm.title = response.data.item.title
+          this.postForm.image_uri = response.data.item.url
+          this.postForm.content_short = response.data.item.desc
+        }).catch(err => {
+          this.fetchSuccess = false
+          console.log(err)
+        })
     },
     submitForm() {
       // this.postForm.display_time = parseInt(this.display_time / 1000)
@@ -237,7 +264,10 @@ export default {
               'title': self.postForm.title,
               'desc': self.postForm.content_short,
               'url': self.postForm.image_uri,
-              'id': this.$route.params.id
+              'id': this.$route.params.id,
+              'content' : self.postForm.content,
+              'author': self.postForm.author,
+              'type': self.postForm.type
             }
 
             // add new article
@@ -245,7 +275,7 @@ export default {
               if (response.data.error_code === 0) {
                 this.$notify({
                   title: '成功',
-                  message: '分类修改成功',
+                  message: '文章修改成功',
                   type: 'success',
                   duration: 2000
                 })
@@ -259,7 +289,7 @@ export default {
               this.loading = false
             }).catch(err => {
               this.$message({
-                message: '分类修改失败',
+                message: '文章修改失败',
                 type: 'warning'
               })
               this.loading = false
@@ -269,15 +299,18 @@ export default {
             const submitData = {
               'title': self.postForm.title,
               'desc': self.postForm.content_short,
-              'url': self.postForm.image_uri
+              'url': self.postForm.image_uri,
+              'content' : self.postForm.content,
+              'author': self.postForm.author,
+              'type': self.postForm.type
             }
 
             // add new article
-            addArticle(submitData).then(response => {
+            createArticle(submitData).then(response => {
               if (response.data.error_code === 0) {
                 this.$notify({
                   title: '成功',
-                  message: '分类创建成功',
+                  message: '文章创建成功',
                   type: 'success',
                   duration: 2000
                 })
@@ -291,7 +324,7 @@ export default {
               this.loading = false
             }).catch(err => {
               this.$message({
-                message: '分类创建失败',
+                message: '文章创建失败',
                 type: 'warning'
               })
               this.loading = false

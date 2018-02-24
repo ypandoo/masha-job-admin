@@ -1,7 +1,7 @@
 <template>
   <div class="tinymce-container editor-container">
     <textarea class="tinymce-textarea" :id="tinymceId"></textarea>
-    <div class="editor-custom-btn-container">
+    <div class="editor-custom-btn-container" style="top:20px">
       <editorImage color="#1890ff" class="editor-upload-btn" @successCBK="imageSuccessCBK"></editorImage>
     </div>
   </div>
@@ -71,7 +71,8 @@ export default {
         body_class: 'panel-body ',
         object_resizing: false,
         toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,
-        menubar: this.menubar,
+        // menubar: this.menubar,
+        menu: {},
         plugins: plugins,
         end_container_on_empty_block: true,
         powerpaste_word_import: 'clean',
@@ -168,4 +169,5 @@ export default {
 .editor-upload-btn {
   display: inline-block;
 }
+
 </style>

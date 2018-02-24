@@ -27,11 +27,18 @@ router.post('/add', function(req, res) {
     return
   }
 
+  const author = req.body.author
+  if (!author) {
+    res.json({ error_code: 1, msg: '作者不能为空' })
+    return
+  }
+
   var article = new Article({
     title: title,
     desc: desc,
     url: url,
     type: type,
+    author: author,
     content: content
   })
   article.save(function(err, docs) {

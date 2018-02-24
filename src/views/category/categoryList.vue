@@ -40,7 +40,7 @@
       </el-table-column>
       <el-table-column min-width="150px" :label="$t('table.title')">
         <template slot-scope="scope">
-          <span class="link-type" @click="handleUpdate(scope.row)">{{scope.row.title}}</span>
+          <span  @click="handleUpdate(scope.row)">{{scope.row.title}}</span>
           <!-- <el-tag>{{scope.row.type | typeFilter}}</el-tag> -->
         </template>
       </el-table-column>

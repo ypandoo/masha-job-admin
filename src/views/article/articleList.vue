@@ -28,11 +28,11 @@
           <span>{{scope.row._id}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('table.image')" width="160">
+      <!-- <el-table-column align="center" :label="$t('table.image')" width="160">
         <template slot-scope="scope">
           <img :src="scope.row.url" style="width:80px; height:60px"/>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column width="200" align="center" :label="$t('table.date')">
         <template slot-scope="scope">
           <span>{{scope.row.updatedAt }}</span>
@@ -40,20 +40,20 @@
       </el-table-column>
       <el-table-column min-width="150px" :label="$t('table.title')">
         <template slot-scope="scope">
-          <span class="link-type" @click="handleUpdate(scope.row)">{{scope.row.title}}</span>
+          <span @click="handleUpdate(scope.row)">{{scope.row.title}}</span>
           <!-- <el-tag>{{scope.row.type | typeFilter}}</el-tag> -->
         </template>
       </el-table-column>
-      <!-- <el-table-column width="110px" align="center" :label="$t('table.author')">
+      <el-table-column width="110px" align="center" :label="$t('table.author')">
         <template slot-scope="scope">
           <span>{{scope.row.author}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="110px" v-if='showReviewer' align="center" :label="$t('table.reviewer')">
+      <el-table-column width="110px" align="center" :label="$t('table.type')">
         <template slot-scope="scope">
-          <span style='color:red;'>{{scope.row.reviewer}}</span>
+          <span >{{scope.row.type.title}}</span>
         </template>
-      </el-table-column> -->
+      </el-table-column> 
       <!-- <el-table-column width="80px" :label="$t('table.importance')">
         <template slot-scope="scope">
           <svg-icon v-for="n in +scope.row.importance" icon-class="star" class="meta-item__icon" :key="n"></svg-icon>
@@ -72,8 +72,8 @@
       </el-table-column> -->
       <el-table-column align="center" :label="$t('table.actions')" width="230" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <router-link :to="'edit-category/'+scope.row._id" >编辑</router-link>
-          <!-- <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button> -->
+          <router-link :to="'edit-article/'+scope.row._id" style="margin-right:20px" >编辑</router-link>
+          <el-button type="danger" size="mini" @click="handleDelete(scope.row)">{{$t('table.delete')}}</el-button>
           <!-- <el-button v-if="scope.row.status!='published'" size="mini" type="success" @click="handleModifyStatus(scope.row,'published')">{{$t('table.publish')}}
           </el-button>
           <el-button v-if="scope.row.status!='draft'" size="mini" @click="handleModifyStatus(scope.row,'draft')">{{$t('table.draft')}}
@@ -90,7 +90,7 @@
       </el-pagination>
     </div>
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <!-- <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="70px" style='width: 400px; margin-left:50px;'>
         <el-form-item :label="$t('table.type')" prop="type">
           <el-select class="filter-item" v-model="temp.type" placeholder="Please select">
@@ -124,9 +124,9 @@
         <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">{{$t('table.confirm')}}</el-button>
         <el-button v-else type="primary" @click="updateData">{{$t('table.confirm')}}</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
 
-    <el-dialog title="Reading statistics" :visible.sync="dialogPvVisible">
+    <!-- <el-dialog title="Reading statistics" :visible.sync="dialogPvVisible">
       <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
         <el-table-column prop="key" label="Channel"> </el-table-column>
         <el-table-column prop="pv" label="Pv"> </el-table-column>
@@ -134,13 +134,13 @@
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogPvVisible = false">{{$t('table.confirm')}}</el-button>
       </span>
-    </el-dialog>
+    </el-dialog> -->
 
   </div>
 </template>
 
 <script>
-import { fetchList } from '@/api/category'
+import { fetchList } from '@/api/article'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 
@@ -188,6 +188,7 @@ export default {
         updatedAt: new Date(),
         title: '',
         type: '',
+        author: '',
         status: 'published'
       },
       dialogFormVisible: false,
