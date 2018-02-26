@@ -72,7 +72,11 @@
       </el-table-column> -->
       <el-table-column align="center" :label="$t('table.actions')" width="230" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <router-link :to="'edit-category/'+scope.row._id" class="link-type">编辑</router-link>
+          <router-link :to="'edit-category/'+scope.row._id" class="link-type" style="margin-right:20px">编辑</router-link>
+          <el-button v-if="scope.row.show" size="mini" type="primary" @click="handleModifyStatus(scope.row, false)">可见
+          </el-button>
+          <el-button v-if="!scope.row.show" size="mini" type="danger" @click="handleModifyStatus(scope.row, true)">不可见
+          </el-button>
           <!-- <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button> -->
           <!-- <el-button v-if="scope.row.status!='published'" size="mini" type="success" @click="handleModifyStatus(scope.row,'published')">{{$t('table.publish')}}
           </el-button>
@@ -140,7 +144,7 @@
 </template>
 
 <script>
-import { fetchList } from '@/api/category'
+import { fetchList, showCategory } from '@/api/category'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 
@@ -245,12 +249,20 @@ export default {
       this.listQuery.page = val
       this.getList()
     },
-    handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作成功',
-        type: 'success'
+    handleModifyStatus(row, show) {
+      showCategory({show:show, id: row._id}).then(response => {
+        this.$message({
+          message: '操作成功',
+          type: 'success'
+        })
+        row.show = show
+      }).catch(err => {
+        this.$message({
+          message: '操作失败',
+          type: 'warning'
+        })
+        console.log(err)
       })
-      row.status = status
     },
     resetTemp() {
       this.temp = {
@@ -333,10 +345,10 @@ export default {
       this.list.splice(index, 1)
     },
     handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
-      })
+      // fetchPv(pv).then(response => {
+      //   this.pvData = response.data.pvData
+      //   this.dialogPvVisible = true
+      // })
     },
     handleDownload() {
       this.downloadLoading = true

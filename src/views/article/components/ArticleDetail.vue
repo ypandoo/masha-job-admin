@@ -138,7 +138,7 @@
 
 <script>
 import Tinymce from '@/components/Tinymce'
-import Upload from '@/components/Upload/singleImage3'
+import Upload from '@/components/Upload/singleFile'
 import MDinput from '@/components/MDinput'
 import Multiselect from 'vue-multiselect'// 使用的一个多选框组件，element-ui的select不能满足所有需求
 import 'vue-multiselect/dist/vue-multiselect.min.css'// 多选框组件css
@@ -247,6 +247,9 @@ export default {
           this.postForm.title = response.data.item.title
           this.postForm.image_uri = response.data.item.url
           this.postForm.content_short = response.data.item.desc
+          this.postForm.content = response.data.item.content
+          this.postForm.author = response.data.item.author
+          this.postForm.type = response.data.item.type
         }).catch(err => {
           this.fetchSuccess = false
           console.log(err)

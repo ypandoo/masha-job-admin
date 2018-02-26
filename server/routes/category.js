@@ -103,14 +103,12 @@ router.post('/show', function(req, res) {
     return
   }
 
-  const show = req.body.show
-  if (!show) {
-    res.json({ error_code: 1, msg: 'show is empty' })
-    return
-  }
+  var show = req.body.show
+  if (!show) 
+    show = false
 
   Category.findOneAndUpdate({ _id: id }, {
-    show: parseInt(show) ? true : false,
+    show: show,
   }, function(err, docs) {
     if (!err) {
       res.json({ error_code: 0, msg: 'success' })

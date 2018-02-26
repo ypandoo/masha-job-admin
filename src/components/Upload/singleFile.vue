@@ -3,14 +3,18 @@
 		<el-upload class="image-uploader" :data="dataObj" drag :multiple="false" :show-file-list="false" action="http://upload.qiniup.com/"
 		  :on-success="handleImageScucess" :before-upload="beforeUpload">
 			<i class="el-icon-upload"></i>
-			<div class="el-upload__text">将图片(*.jpg,png,bmp,jpeg)拖到此处，或<em>点击上传</em></div>
+			<div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
 		</el-upload>
 		<div class="image-preview image-app-preview">
 			<div class="image-preview-wrapper" v-show="imageUrl.length>1">
-				<img :src="imageUrl">
-				<!-- <div class="image-preview-action">
-					<i @click="rmImage" class="el-icon-delete"></i>
-				</div> -->
+				<img :src="'http://p3ts1f5ty.bkt.clouddn.com/file.png'" style="width: 100px;
+    height: 100px;
+    left: 50%;
+    position: relative;
+    margin-left: -50px;
+    margin-top: 30px;">
+					<!-- <i @click="rmImage" class="el-icon-delete"></i> -->
+					<p style="text-align:center">{{currentFile}}</p>
 			</div>
 		</div>
 		<!-- <div class="image-preview">
@@ -25,7 +29,8 @@
 </template>
 
 <script>
-import { getTokenNoName } from '@/api/qiniu'
+import { getToken } from '@/api/qiniu'
+import { filenameFromURL } from '@/utils/index'
 
 export default {
   name: 'singleImageUpload',
@@ -35,12 +40,16 @@ export default {
   computed: {
     imageUrl() {
       return this.value
-    }
+		},
+		
+		currentFile(){
+			return filenameFromURL(this.imageUrl)
+		}
   },
   data() {
     return {
       tempUrl: '',
-      dataObj: { token: '', key: '' }
+			dataObj: { token: '', key: '' },
     }
   },
   methods: {
@@ -56,7 +65,8 @@ export default {
     beforeUpload(file) {
       const _self = this
       return new Promise((resolve, reject) => {
-        getTokenNoName().then(response => {
+        getToken({name: file.name}).then(response => {
+					// currentFile = file.name
           const key = response.data.qiniu_key
           const token = response.data.qiniu_token
           _self._data.dataObj.token = token

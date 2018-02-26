@@ -75,10 +75,10 @@
           <router-link :to="'edit-article/'+scope.row._id" class="link-type" style="margin-right:20px" >编辑</router-link>
           <el-button type="danger" size="mini" @click="handleConfirmDelete(scope.row)">{{$t('table.delete')}}</el-button>
           <!-- <el-button v-if="scope.row.status!='published'" size="mini" type="success" @click="handleModifyStatus(scope.row,'published')">{{$t('table.publish')}}
+          </el-button> -->
+          <!-- <el-button v-if="scope.row.show" size="mini" @click="handleModifyStatus(scope.row, true)">显示
           </el-button>
-          <el-button v-if="scope.row.status!='draft'" size="mini" @click="handleModifyStatus(scope.row,'draft')">{{$t('table.draft')}}
-          </el-button>
-          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleModifyStatus(scope.row,'deleted')">{{$t('table.delete')}}
+          <el-button v-if="!scope.row.show" size="mini" type="danger" @click="handleModifyStatus(scope.row, false)">不显示
           </el-button> -->
         </template>
       </el-table-column>
@@ -257,12 +257,23 @@ export default {
       this.listQuery.page = val
       this.getList()
     },
-    handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作成功',
-        type: 'success'
+
+    handleModifyStatus(row, show) {
+      showCategory({show:show}).then(response => {
+        this.$message({
+          message: '操作成功',
+          type: 'success'
+        })
+        row.show = show
+      }).catch(err => {
+        this.$message({
+          message: '操作失败',
+          type: 'warning'
+        })
+        console.log(err)
       })
-      row.status = status
+
+
     },
     resetTemp() {
       this.temp = {
@@ -361,12 +372,12 @@ export default {
       this.currentRow = row
       this.dialogDelete = true
     },
-    handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogDelete = true
-      })
-    },
+    // handleFetchPv(pv) {
+    //   // fetchPv(pv).then(response => {
+    //   //   this.pvData = response.data.pvData
+    //   //   this.dialogDelete = true
+    //   // })
+    // },
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {

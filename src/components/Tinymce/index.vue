@@ -11,6 +11,7 @@
 import editorImage from './components/editorImage'
 import plugins from './plugins'
 import toolbar from './toolbar'
+import { getTokenNoName , upload} from '@/api/qiniu'
 
 export default {
   name: 'tinymce',
@@ -92,8 +93,8 @@ export default {
             this.hasChange = true
             this.$emit('input', editor.getContent({ format: 'raw' }))
           })
-        }
-        // 整合七牛上传
+        },
+        //整合七牛上传
         // images_dataimg_filter(img) {
         //   setTimeout(() => {
         //     const $image = $(img);
@@ -108,24 +109,24 @@ export default {
         //   }, 0);
         //   return img
         // },
-        // images_upload_handler(blobInfo, success, failure, progress) {
-        //   progress(0);
-        //   const token = _this.$store.getters.token;
-        //   getToken(token).then(response => {
-        //     const url = response.data.qiniu_url;
-        //     const formData = new FormData();
-        //     formData.append('token', response.data.qiniu_token);
-        //     formData.append('key', response.data.qiniu_key);
-        //     formData.append('file', blobInfo.blob(), url);
-        //     upload(formData).then(() => {
-        //       success(url);
-        //       progress(100);
-        //     })
-        //   }).catch(err => {
-        //     failure('出现未知问题，刷新页面，或者联系程序员')
-        //     console.log(err);
-        //   });
-        // },
+        images_upload_handler(blobInfo, success, failure, progress) {
+          progress(0);
+          //const token = _this.$store.getters.token;
+          getTokenNoName().then(response => {
+            const url = response.data.qiniu_url;
+            const formData = new FormData();
+            formData.append('token', response.data.qiniu_token);
+            formData.append('key', response.data.qiniu_key);
+            formData.append('file', blobInfo.blob(), url);
+            upload(formData).then(() => {
+              success(url);
+              progress(100);
+            })
+          }).catch(err => {
+            failure('出现未知问题，刷新页面，或者联系程序员')
+            console.log(err);
+          });
+        },
       })
     },
     destroyTinymce() {

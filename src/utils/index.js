@@ -265,3 +265,8 @@ export function deepClone(source) {
   }
   return targetObj
 }
+
+
+export function filenameFromURL(url){
+  return url.split('/').pop().split('#')[0].split('?')[0];
+}

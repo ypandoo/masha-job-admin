@@ -113,7 +113,7 @@
         </div> -->
 
         <div style="margin-bottom: 20px;">
-          <el-form-item label-width="100px" label="上传图片或文件:" prop="image_uri">
+          <el-form-item label-width="100px" label="上传分类封面图片:" prop="image_uri">
           <Upload v-model="postForm.image_uri"></Upload>
           </el-form-item>
         </div>

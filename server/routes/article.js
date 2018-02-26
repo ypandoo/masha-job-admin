@@ -58,10 +58,7 @@ router.post('/update', function(req, res) {
     return
   }
   const url = req.body.url
-  if (!url) {
-    res.json({ error_code: 1, msg: 'url is empty' })
-    return
-  }
+
   const desc = req.body.desc
   if (!desc) {
     res.json({ error_code: 1, msg: 'desc is empty' })
