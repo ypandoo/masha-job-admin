@@ -94,7 +94,7 @@
       </el-pagination>
     </div>
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <!-- <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="70px" style='width: 400px; margin-left:50px;'>
         <el-form-item :label="$t('table.type')" prop="type">
           <el-select class="filter-item" v-model="temp.type" placeholder="Please select">
@@ -128,9 +128,9 @@
         <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">{{$t('table.confirm')}}</el-button>
         <el-button v-else type="primary" @click="updateData">{{$t('table.confirm')}}</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
 
-    <el-dialog title="Reading statistics" :visible.sync="dialogPvVisible">
+    <!-- <el-dialog title="Reading statistics" :visible.sync="dialogPvVisible">
       <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
         <el-table-column prop="key" label="Channel"> </el-table-column>
         <el-table-column prop="pv" label="Pv"> </el-table-column>
@@ -138,7 +138,7 @@
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogPvVisible = false">{{$t('table.confirm')}}</el-button>
       </span>
-    </el-dialog>
+    </el-dialog> -->
 
   </div>
 </template>

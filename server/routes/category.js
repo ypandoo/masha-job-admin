@@ -72,7 +72,14 @@ router.post('/list', function(req, res) {
   if (!page) {
     page = 1
   }
-  Category.paginate({}, { page: page, limit: limit }, function(err, docs) {
+
+  var show = req.body.show
+  var query = {}
+  if( show === false){
+    query.show = false
+  }
+
+  Category.paginate(query, { page: page, limit: limit }, function(err, docs) {
     if (!err) {
       res.json({ error_code: 0, msg: 'success', items: docs.docs, total: docs.total, page: docs.page, pages: docs.pages })
     } else {

@@ -68,7 +68,7 @@
               <MDinput name="name" v-model="postForm.title" required :maxlength="100">
                 标题
               </MDinput>
-              <span v-show="postForm.title.length>=26" class='title-prompt'>app可能会显示不全</span>
+              <!-- <span v-show="postForm.title.length>=26" class='title-prompt'>app可能会显示不全</span> -->
             </el-form-item>
 
             <div class="postInfo-container">
