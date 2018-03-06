@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getToken(data) {
   return request({
-    url: 'http://localhost:3000/getToken', 
+    url: '/getToken', 
     method: 'post',
     data
   })
@@ -10,7 +10,7 @@ export function getToken(data) {
 
 export function getTokenNoName() {
   return request({
-    url: 'http://localhost:3000/getTokenNoName', 
+    url: '/getTokenNoName', 
     method: 'post'
   })
 }

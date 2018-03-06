@@ -6,7 +6,7 @@ export function loginByUsername(username, password) {
     password
   }
   return request({
-    url: 'http://localhost:3000/user/login/',
+    url: '/user/login/',
     // url: 'login/login/',
     method: 'post',
     data
@@ -15,14 +15,14 @@ export function loginByUsername(username, password) {
 
 export function logout() {
   return request({
-    url: '/login/logout',
+    url: '/user/logout',
     method: 'post'
   })
 }
 
 export function getUserInfo(token) {
   return request({
-    url: 'http://localhost:3000/user/info/',
+    url: '/user/info/',
     // url: '/user/info',
     method: 'get',
     params: { token }

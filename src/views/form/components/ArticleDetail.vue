@@ -162,7 +162,7 @@ export default {
           message: rule.field + '为必传项',
           type: 'error'
         })
-        callback(null)
+        //callback(null)
       } else {
         callback()
       }
@@ -176,7 +176,7 @@ export default {
             message: '外链url填写不正确',
             type: 'error'
           })
-          callback(null)
+          //callback(null)
         }
       } else {
         callback()

@@ -21,4 +21,9 @@ router.get('/info', function(req, res) {
   })
 })
 
+router.post('/logout', function(req, res) {
+  res.json({
+  })
+})
+
 module.exports = router

@@ -180,7 +180,7 @@ export default {
           message: '内容未填写完整',
           type: 'error'
         })
-        callback(null)
+        //callback(null)
       } else {
         callback()
       }
@@ -194,7 +194,7 @@ export default {
             message: '外链url填写不正确',
             type: 'error'
           })
-          callback(null)
+          //callback(null)
         }
       } else {
         callback()

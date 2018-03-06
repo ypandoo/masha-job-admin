@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function addCategory(data) {
   return request({
-    url: 'http://localhost:3000/category/add',
+    url: '/category/add',
     method: 'post',
     data
   })
@@ -10,7 +10,7 @@ export function addCategory(data) {
 
 export function updateCategory(data) {
   return request({
-    url: 'http://localhost:3000/category/update',
+    url: '/category/update',
     method: 'post',
     data
   })
@@ -18,7 +18,7 @@ export function updateCategory(data) {
 
 export function fetchList(data) {
   return request({
-    url: 'http://localhost:3000/category/list',
+    url: '/category/list',
     method: 'post',
     data
   })
@@ -26,7 +26,7 @@ export function fetchList(data) {
 
 export function fetchCategory(data) {
   return request({
-    url: 'http://localhost:3000/category/findOne',
+    url: '/category/findOne',
     method: 'post',
     data
   })
@@ -34,7 +34,7 @@ export function fetchCategory(data) {
 
 export function showCategory(data) {
   return request({
-    url: 'http://localhost:3000/category/show',
+    url: '/category/show',
     method: 'post',
     data
   })
