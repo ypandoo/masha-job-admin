@@ -75,8 +75,8 @@ router.post('/list', function(req, res) {
 
   var show = req.body.show
   var query = {}
-  if( show === false){
-    query.show = false
+  if( show === true){
+    query.show = true
   }
 
   Category.paginate(query, { page: page, limit: limit }, function(err, docs) {
