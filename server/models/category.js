@@ -9,7 +9,7 @@ var _Category = new Schema({
   id: Schema.Types.ObjectId,
   title: String,
   desc: String,
-  sort: { type: Number, default: 100 },
+  sort: { type: Number, default: 1 },
   url: String,
   show: {type: Boolean, default: true}
 })

@@ -108,6 +108,12 @@
           <span class="word-counter" v-show="contentShortLength">{{contentShortLength}}字</span>
         </el-form-item>
 
+        <el-form-item style="margin-bottom: 40px;" label-width="100px" label="排序等级:(最小1,最大100，数字越大排序越靠前)" prop="sort" >
+            <el-slider v-model="postForm.sort" :min="1"></el-slider>
+        </el-form-item>
+
+         
+
         <!-- <div class="editor-container">
           <tinymce :height=400 ref="editor" v-model="postForm.content"></tinymce>
         </div> -->
@@ -142,6 +148,7 @@ const defaultForm = {
   source_uri: '', // 文章外链
   image_uri: '', // 文章图片
   source_name: '', // 文章外部作者
+  sort: 1,
   display_time: undefined, // 前台展示时间
   id: undefined,
   platforms: ['a-platform'],
@@ -220,6 +227,7 @@ export default {
         this.postForm.title = response.data.item.title
         this.postForm.image_uri = response.data.item.url
         this.postForm.content_short = response.data.item.desc
+        this.postForm.sort = response.data.item.sort
       }).catch(err => {
         this.fetchSuccess = false
         console.log(err)
@@ -237,6 +245,7 @@ export default {
               'title': self.postForm.title,
               'desc': self.postForm.content_short,
               'url': self.postForm.image_uri,
+              'sort': self.postForm.sort,
               'id': this.$route.params.id
             }
 
@@ -269,7 +278,8 @@ export default {
             const submitData = {
               'title': self.postForm.title,
               'desc': self.postForm.content_short,
-              'url': self.postForm.image_uri
+              'url': self.postForm.image_uri,
+              'sort': self.postForm.sort,
             }
 
             // add new category

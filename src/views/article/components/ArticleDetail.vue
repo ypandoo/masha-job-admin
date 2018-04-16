@@ -100,6 +100,16 @@
                   </el-form-item>
                 </el-col>
 
+                <el-col :span="8">
+                  <el-form-item :label="'发布时间(文章会按照发布时间排序)'" prop ="publish_date" >
+                          <el-date-picker
+                          v-model="postForm.publish_date"
+                          type="date"
+                          placeholder="选择日期">
+                        </el-date-picker>
+                  </el-form-item>
+                </el-col>
+
                 <!-- <el-col :span="8">
                   <el-form-item label-width="80px" label="发布时间:" class="postInfo-container-item">
                     <el-date-picker v-model="postForm.display_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
@@ -119,7 +129,13 @@
 
 
         <div style="margin-bottom: 20px;">
-          <el-form-item label-width="100px" label="上传附件:" prop="image_uri">
+          <el-form-item label-width="100px" label="上传文章封面图片:" prop="cover_url">
+          <UploadImage v-model="postForm.cover_url"></UploadImage>
+          </el-form-item>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <el-form-item label-width="100px" label="上传文章附件:" prop="image_uri">
           <Upload v-model="postForm.image_uri"></Upload>
           </el-form-item>
         </div>
@@ -139,6 +155,7 @@
 <script>
 import Tinymce from '@/components/Tinymce'
 import Upload from '@/components/Upload/singleFile'
+import UploadImage from '@/components/Upload/singleImage3'
 import MDinput from '@/components/MDinput'
 import Multiselect from 'vue-multiselect'// 使用的一个多选框组件，element-ui的select不能满足所有需求
 import 'vue-multiselect/dist/vue-multiselect.min.css'// 多选框组件css
@@ -155,10 +172,11 @@ const defaultForm = {
   content_short: '', // 文章摘要
   source_uri: '', // 文章外链
   image_uri: '', // 文章图片
+  cover_url:'',
   type: '',
   author: '',
   source_name: '', // 文章外部作者
-  display_time: undefined, // 前台展示时间
+  publish_date: new Date(), // 前台展示时间
   id: undefined,
   platforms: ['a-platform'],
   comment_disabled: false
@@ -166,7 +184,7 @@ const defaultForm = {
 
 export default {
   name: 'articleDetail',
-  components: { Tinymce, MDinput, Upload, Multiselect, Sticky },
+  components: { Tinymce, MDinput, Upload, UploadImage, Multiselect, Sticky },
   props: {
     isEdit: {
       type: Boolean,
@@ -250,6 +268,8 @@ export default {
           this.postForm.content = response.data.item.content
           this.postForm.author = response.data.item.author
           this.postForm.type = response.data.item.type
+          this.postForm.publish_date = response.data.item.publish_date
+          this.postForm.cover_url = response.data.item.cover_url
         }).catch(err => {
           this.fetchSuccess = false
           console.log(err)
@@ -270,7 +290,9 @@ export default {
               'id': this.$route.params.id,
               'content' : self.postForm.content,
               'author': self.postForm.author,
-              'type': self.postForm.type
+              'type': self.postForm.type,
+              'publish_date':self.postForm.publish_date,
+              'cover_url': self.postForm.cover_url
             }
 
             // add new article
@@ -305,7 +327,9 @@ export default {
               'url': self.postForm.image_uri,
               'content' : self.postForm.content,
               'author': self.postForm.author,
-              'type': self.postForm.type
+              'type': self.postForm.type,
+              'publish_date': self.postForm.publish_date,
+              'cover_url': self.postForm.cover_url
             }
 
             // add new article

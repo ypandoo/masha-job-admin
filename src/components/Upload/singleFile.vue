@@ -33,7 +33,7 @@ import { getToken } from '@/api/qiniu'
 import { filenameFromURL } from '@/utils/index'
 
 export default {
-  name: 'singleImageUpload',
+  name: 'singleFileUpload',
   props: {
     value: String
   },

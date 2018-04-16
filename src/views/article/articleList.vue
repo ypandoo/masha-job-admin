@@ -33,27 +33,36 @@
           <img :src="scope.row.url" style="width:80px; height:60px"/>
         </template>
       </el-table-column> -->
-      <el-table-column width="200" align="center" :label="$t('table.date')">
+      <el-table-column width="200" align="center" :label="'发布时间'">
         <template slot-scope="scope">
-          <span>{{scope.row.updatedAt }}</span>
+          <span>{{ new Date(scope.row.publish_date) | parseTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column min-width="150px" :label="$t('table.title')">
-        <template slot-scope="scope">
-          <span @click="handleUpdate(scope.row)">{{scope.row.title}}</span>
-          <!-- <el-tag>{{scope.row.type | typeFilter}}</el-tag> -->
-        </template>
-      </el-table-column>
-      <el-table-column width="110px" align="center" :label="$t('table.author')">
+
+      <el-table-column width="110px" align="center" :label="'文章作者'">
         <template slot-scope="scope">
           <span>{{scope.row.author}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="110px" align="center" :label="$t('table.type')">
+
+      <el-table-column align="center" :label="'文章封面'" width="160">
+        <template slot-scope="scope">
+          <img v-if="scope.row.cover_url" :src="scope.row.cover_url" style="width:80px; height:60px"/>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="110px" align="center" :label="'文章分类'">
         <template slot-scope="scope">
           <span >{{scope.row.type.title}}</span>
         </template>
       </el-table-column> 
+
+      <el-table-column min-width="150px" :label="'文章标题'">
+        <template slot-scope="scope">
+          <span>{{scope.row.title}}</span>
+          <!-- <el-tag>{{scope.row.type | typeFilter}}</el-tag> -->
+        </template>
+      </el-table-column>
       <!-- <el-table-column width="80px" :label="$t('table.importance')">
         <template slot-scope="scope">
           <svg-icon v-for="n in +scope.row.importance" icon-class="star" class="meta-item__icon" :key="n"></svg-icon>
@@ -220,6 +229,9 @@ export default {
     },
     typeFilter(type) {
       return calendarTypeKeyValue[type]
+    },
+    formatTime(time){
+      return new Date(time).toISOString().slice(0, 10);
     }
   },
   created() {

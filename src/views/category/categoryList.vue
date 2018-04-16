@@ -33,14 +33,19 @@
           <img :src="scope.row.url" style="width:80px; height:60px"/>
         </template>
       </el-table-column>
-      <el-table-column width="200" align="center" :label="$t('table.date')">
+      <el-table-column width="200" align="center" :label="'显示排序'">
         <template slot-scope="scope">
-          <span>{{scope.row.updatedAt }}</span>
+          <span>{{scope.row.sort }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column width="200" align="center" :label="'最后更新时间'">
+        <template slot-scope="scope">
+          <span>{{ new Date(scope.row.updatedAt) | parseTime }}</span>
         </template>
       </el-table-column>
       <el-table-column min-width="150px" :label="$t('table.title')">
         <template slot-scope="scope">
-          <span  @click="handleUpdate(scope.row)">{{scope.row.title}}</span>
+          <span>{{scope.row.title}}</span>
           <!-- <el-tag>{{scope.row.type | typeFilter}}</el-tag> -->
         </template>
       </el-table-column>

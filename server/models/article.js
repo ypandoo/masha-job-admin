@@ -12,6 +12,9 @@ var _Article = new Schema({
   author: String,
   content: String,
   url: String,
+  cover_url: String,
+  publish_date:{type: Date, default: Date.now},
+  sort: { type: Number, default: 1 },
   deleted: {type: Boolean, default: false},
   type: {type: mongoose.Schema.Types.ObjectId, ref: 'Category'},
 })

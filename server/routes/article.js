@@ -26,6 +26,11 @@ router.post('/add', function(req, res) {
     res.json({ error_code: 1, msg: 'type is empty' })
     return
   }
+  const publish_date = req.body.publish_date
+  if (!publish_date) {
+    res.json({ error_code: 1, msg: 'publish_date is empty' })
+    return
+  }
 
   const author = req.body.author
   if (!author) {
@@ -33,12 +38,17 @@ router.post('/add', function(req, res) {
     return
   }
 
+  const cover_url = req.body.cover_url
+
+
   var article = new Article({
     title: title,
     desc: desc,
     url: url,
     type: type,
     author: author,
+    publish_date: publish_date,
+    cover_url: cover_url,
     content: content
   })
   article.save(function(err, docs) {
@@ -84,6 +94,12 @@ router.post('/update', function(req, res) {
     res.json({ error_code: 1, msg: 'author is empty' })
     return
   }
+  const publish_date = req.body.publish_date
+  if (!publish_date) {
+    res.json({ error_code: 1, msg: 'publish_date is empty' })
+    return
+  }
+  const cover_url = req.body.cover_url
 
   Article.findOneAndUpdate({ _id: id }, {
     title: title,
@@ -91,6 +107,8 @@ router.post('/update', function(req, res) {
     url: url,
     content: content,
     author: author,
+    publish_date: publish_date,
+    cover_url: cover_url,
     type: type
   }, function(err, docs) {
     if (!err) {
@@ -120,7 +138,8 @@ router.post('/list', function(req, res) {
   var options = {
     populate: 'type',
     page: page, 
-    limit: limit
+    limit: limit,
+    sort: {publish_date: 'desc'},
   };
 
   Article.paginate(query, options, function(err, docs) {

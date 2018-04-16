@@ -18,11 +18,17 @@ router.post('/add', function(req, res) {
     res.json({ error_code: 1, msg: 'title is empty' })
     return
   }
+  const sort = req.body.sort
+  if (!sort) {
+    res.json({ error_code: 1, msg: 'sort is empty' })
+    return
+  }
 
   var category = new Category({
     title: title,
     desc: desc,
-    url: url
+    url: url,
+    sort: sort
   })
   category.save()
   res.json({ error_code: 0, msg: 'success' })
@@ -49,11 +55,17 @@ router.post('/update', function(req, res) {
     res.json({ error_code: 1, msg: 'title is empty' })
     return
   }
+  const sort = req.body.sort
+  if (!sort) {
+    res.json({ error_code: 1, msg: 'sort is empty' })
+    return
+  }
 
   Category.findOneAndUpdate({ _id: id }, {
     title: title,
     desc: desc,
-    url: url
+    url: url,
+    sort: sort
   }, function(err, docs) {
     if (!err) {
       res.json({ error_code: 0, msg: 'success' })
@@ -79,7 +91,7 @@ router.post('/list', function(req, res) {
     query.show = true
   }
 
-  Category.paginate(query, { page: page, limit: limit }, function(err, docs) {
+  Category.paginate(query, { sort: {sort: 'desc'}, page: page, limit: limit }, function(err, docs) {
     if (!err) {
       res.json({ error_code: 0, msg: 'success', items: docs.docs, total: docs.total, page: docs.page, pages: docs.pages })
     } else {
