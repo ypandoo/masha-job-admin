@@ -259,6 +259,7 @@ export default {
                   duration: 2000
                 })
                 this.postForm.status = 'published'
+                 self.$router.push({path: '/category/list'})
               } else {
                 this.$message({
                   message: response.data.msg,
@@ -292,6 +293,7 @@ export default {
                   duration: 2000
                 })
                 this.postForm.status = 'published'
+                 this.$router.push({path: '/category/list'})
               } else {
                 this.$message({
                   message: response.data.msg,
