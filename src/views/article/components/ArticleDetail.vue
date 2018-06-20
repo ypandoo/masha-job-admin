@@ -187,10 +187,10 @@ export default {
               this.postForm.companies = response.data.items
               if(this.postForm.companies.length>0){
                 this.postForm.company = this.postForm.companies[0]._id
-                this.getPosition()
               }else{
                 this.company = ""
               }
+              this.getPosition()
           } else {
             alert('获取经销商失败!')
           }
@@ -204,11 +204,11 @@ export default {
         fetchPosition({}).then(response => {
           if (response.data.error_code == 0) {
               this.postForm.positions = response.data.items
-              if(this.postForm.positions.length>0){
-                this.postForm.position = this.postForm.positions[0]._id
-              }else{
-                this.postForm.position = ""
-              }
+              // if(this.postForm.positions.length>0){
+              //   this.postForm.position = this.postForm.positions[0]._id
+              // }else{
+              //   this.postForm.position = ""
+              // }
           } else {
             alert('获取职位失败!')
           }

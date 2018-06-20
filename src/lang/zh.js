@@ -1,15 +1,19 @@
 export default {
   route: {
     dashboard: '首页',
-    category: '分类',
-    createCategory: '创建分类',
+    category: '经销商管理',
+    createCategory: '增加经销商',
     editCategory: '编辑分类',
-    categoryList: '分类列表',
+    categoryList: '经销商列表',
 
-    article: '文章',
-    createArticle: '创建文章',
-    editArticle: '编辑文章',
-    articleList: '文章列表',
+    article: '职位管理',
+    createArticle: '发布职位',
+    editArticle: '编辑列表',
+    articleList: '职位列表',
+
+    position: '职位名称管理',
+    createPosition: '新增职位名称',
+    positionList: '职位名称列表',
 
     introduction: '简述',
     documentation: '文档',

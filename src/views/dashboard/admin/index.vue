@@ -2,12 +2,12 @@
   <div class="dashboard-editor-container">
     <div class=" clearfix">
       <pan-thumb style="float: left" :image="avatar"> 欢迎您:
-        <span class="pan-info-roles" :key='item' v-for="item in roles">{{item}}</span>
+        <span class="pan-info-roles" :key='item' v-for="item in roles">后台管理员</span>
       </pan-thumb>
       <!-- <github-corner></github-corner> -->
       <div class="info-container">
-        <span class="display_name">{{name}}</span>
-        <span style="font-size:20px;padding-top:20px;display:inline-block;">欢迎使用Pyonex网站后台管理系统</span>
+        <span class="display_name">后台管理</span>
+        <span style="font-size:20px;padding-top:20px;display:inline-block;">欢迎使用玛莎拉蒂H5职位发布后台管理系统</span>
       </div>
     </div>
     <div>

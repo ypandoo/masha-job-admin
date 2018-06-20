@@ -63,19 +63,34 @@ export default new Router({
 })
 
 export const asyncRouterMap = [
+  {
+    path: '/category', //area
+    component: Layout,
+    redirect: 'noredirect',
+    name: 'category',
+    meta: {
+      title: 'category',
+      icon: 'form'
+    },
+    children: [
+      { path: 'create-category', component: _import('category/create'), name: 'createCategory', meta: { title: 'createCategory', icon: 'table' }},
+      // { path: 'edit-category/:id', component: _import('category/edit'), name: 'editCategory', meta: { title: 'editCategory', icon: 'table' }, hidden: true},
+      { path: 'list', component: _import('category/categoryList'), name: 'categoryList', meta: { title: 'categoryList', icon: 'table' }}
+    ]
+  },
   // {
-  //   path: '/category', //area
+  //   path: '/position', //area
   //   component: Layout,
   //   redirect: 'noredirect',
-  //   name: 'category',
+  //   name: 'position',
   //   meta: {
-  //     title: 'category',
+  //     title: 'position',
   //     icon: 'form'
   //   },
   //   children: [
-  //     { path: 'create-category', component: _import('category/create'), name: 'createCategory', meta: { title: 'createCategory', icon: 'table' }},
-  //     { path: 'edit-category/:id', component: _import('category/edit'), name: 'editCategory', meta: { title: 'editCategory', icon: 'table' }, hidden: true},
-  //     { path: 'list', component: _import('category/categoryList'), name: 'categoryList', meta: { title: 'categoryList', icon: 'table' }}
+  //     { path: 'create-position', component: _import('position/create'), name: 'createPosition', meta: { title: 'createPosition', icon: 'table' }},
+  //     // { path: 'edit-category/:id', component: _import('category/edit'), name: 'editCategory', meta: { title: 'editCategory', icon: 'table' }, hidden: true},
+  //     { path: 'list', component: _import('position/positionList'), name: 'positionList', meta: { title: 'positionList', icon: 'table' }}
   //   ]
   // },
   {
@@ -90,7 +105,7 @@ export const asyncRouterMap = [
     children: [
       { path: 'create-article', component: _import('article/create'), name: 'createArticle', meta: { title: 'createArticle', icon: 'table' }},
       // { path: 'edit-article/:id', component: _import('article/edit'), name: 'editArticle', meta: { title: 'editArticle', icon: 'table' }, hidden: true},
-      // { path: 'list', component: _import('article/articleList'), name: 'articleList', meta: { title: 'articleList', icon: 'table' }}
+      { path: 'list', component: _import('article/articleList'), name: 'articleList', meta: { title: 'articleList', icon: 'table' }}
     ]
   },
   // {

@@ -1,16 +1,16 @@
 <template>
   <div class="app-container calendar-list-container">
-    <div class="filter-container">
+    <!-- <div class="filter-container">
       <el-select clearable class="filter-item" style="width: 130px" v-model="listQuery.area" :placeholder="'请选择区域'" @change="getList()">
         <el-option v-for="item in  typeOptions" :key="item._id" :label="item.title" :value="item._id">
         </el-option>
       </el-select>
-    </div>
+    </div> -->
 
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
 
-      <el-table-column  :label="'经销商名称'" >
+      <el-table-column  :label="'职位名称'" >
         <template slot-scope="scope">
           <span>{{scope.row.title}}</span>
         </template>
@@ -32,10 +32,11 @@ import { fetchList } from '@/api/company'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import { fetchList as fetchArea} from '@/api/area'
+import { fetchList as fetchPosition} from '@/api/position'
 
 
 export default {
-  name: 'complexTable',
+  name: 'positionList',
   directives: {
     waves
   },
@@ -47,7 +48,7 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 1000,
+        limit: 20,
       },
       typeOptions: [],
 
@@ -80,8 +81,8 @@ export default {
     // }
   },
   created() {
-    this.getList()
-    this.getArea()
+    //this.getList()
+    this.getPosition()
   },
   methods: {
     getList() {
@@ -93,11 +94,13 @@ export default {
         self.listLoading = false
       })
     },
-    getArea(){
-        fetchArea({limit:1000, page:0}).then(response => {
-          this.typeOptions = response.data.items
+    getPosition(){
+        this.listLoading = true
+        fetchPosition({limit:20, page:0}).then(response => {
+          this.list = response.data.items
+          this.listLoading = false
         }).catch(err => {
-          this.fetchSuccess = false
+          this.listLoading = false
           console.log(err)
         })
     },

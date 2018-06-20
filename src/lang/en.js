@@ -11,6 +11,10 @@ export default {
     editArticle: 'Edit Article',
     articleList: 'Article List',
 
+    position: 'Position',
+    createPosition: 'New Position',
+    positionList: 'Position List',
+
     introduction: 'Introduction',
     documentation: 'Documentation',
     permission: 'Permission',

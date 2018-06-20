@@ -16,33 +16,11 @@
       </sticky>
 
       <div class="createPost-main-container">
-        <el-row>
-          <el-col :span="21">
 
-            <div class="postInfo-container">
-              <el-row>
-                <el-col :span="24">
-                  <el-form-item :label="'区域'" prop ="type" >
-                    <el-select class="filter-item" v-model="postForm.area"  placeholder="请选择区域">
-                      <el-option v-for="item in postForm.areas" :key="item._id" :label="item.title" :value="item._id">
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </div>
-          </el-col>
-        </el-row>
-
-        <el-form-item style="margin-bottom: 40px;" label-width="100px" label="经销商录入:支持一个区域下多个经销商一次导入，只需使用 ； （中文分号）隔开。例如：经销商1；经销商2；经销商3" prop="company">
-          <el-input type="textarea" class="article-textarea" :rows="1" autosize placeholder="请输入经销商" v-model="postForm.company" >
+        <el-form-item style="margin-bottom: 40px;" label-width="100px" label="职位名称录入:" prop="position">
+          <el-input type="textarea" class="article-textarea" :rows="1" autosize placeholder="请输入职位名称" v-model="postForm.company" >
           </el-input>
         </el-form-item>
-
-        <!-- <el-form-item style="margin-bottom: 40px;" label-width="100px" label="排序等级:(最小1,最大100，数字越大排序显示越靠前)" prop="sort" >
-            <el-slider v-model="postForm.sort" :min="1"></el-slider>
-        </el-form-item> -->
-
       </div>
     </el-form>
 
@@ -50,16 +28,12 @@
 </template>
 
 <script>
-import Tinymce from '@/components/Tinymce'
-import Upload from '@/components/Upload/singleImage3'
-import MDinput from '@/components/MDinput'
-import Multiselect from 'vue-multiselect'// 使用的一个多选框组件，element-ui的select不能满足所有需求
-import 'vue-multiselect/dist/vue-multiselect.min.css'// 多选框组件css
+
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { fetchList as fetchCompany} from '@/api/company'
 import { fetchList as fetchArea} from '@/api/area'
 import { fetchList as fetchPosition} from '@/api/position'
-import { addCompany } from '@/api/company'
+import { addPosition } from '@/api/position'
 
 const defaultForm = {
   status: 'draft',
@@ -68,8 +42,6 @@ const defaultForm = {
   company: "",
   area:"",
   position:"",
-  areas:[],
-  positions:[],
   publish_date: new Date(), // 前台展示时间
   id: undefined,
   platforms: ['a-platform'],
@@ -77,8 +49,8 @@ const defaultForm = {
 }
 
 export default {
-  name: 'categoryDetail',
-  components: { Tinymce, MDinput, Upload, Multiselect, Sticky },
+  name: 'positionDetail',
+  components: {Sticky },
   props: {
     isEdit: {
       type: Boolean,
@@ -135,7 +107,7 @@ export default {
       return this.postForm.content_short.length
     },
 
-    companies() {
+    positions() {
       var array = this.postForm.company.split("；");
       var nums = [];
       for(var i = 0 ;i < array.length ; i++){
@@ -168,12 +140,11 @@ export default {
           this.loading = true
 
             const submitData = {
-              'id' : self.postForm.area,
-              'companies': self.companies,
+              'positions': self.positions,
             }
 
             // add new article
-            addCompany(submitData).then(response => {
+            addPosition(submitData).then(response => {
               if (response.data.error_code === 0) {
                 this.$notify({
                   title: '成功',

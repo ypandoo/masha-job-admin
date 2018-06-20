@@ -16,4 +16,13 @@ export function fetchList(data) {
   })
 }
 
+export function deleteJob(data) {
+  return request({
+    url: '/job/delete',
+    method: 'post',
+    data
+  })
+}
+
+
 

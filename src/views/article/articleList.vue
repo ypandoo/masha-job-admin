@@ -7,81 +7,66 @@
         <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item">
         </el-option>
       </el-select> -->
-      <el-select clearable class="filter-item" style="width: 130px" v-model="listQuery.type" :placeholder="$t('table.type')">
-        <el-option v-for="item in  typeOptions" :key="item._id" :label="item.title" :value="item._id">
+      <el-select clearable class="filter-item" style="width: 130px" v-model="listQuery.area" :placeholder="'请选择区域'">
+        <el-option v-for="item in  areas" :key="item._id" :label="item.title" :value="item._id">
         </el-option>
       </el-select>
-      <!-- <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
+
+      <el-select clearable class="filter-item" style="width: 130px" v-model="listQuery.position" :placeholder="'请选择职位名称'">
+        <el-option v-for="item in  positions" :key="item._id" :label="item.title" :value="item._id">
         </el-option>
-      </el-select> -->
+      </el-select>
+
+      <el-select clearable class="filter-item" style="width: 300px" v-model="listQuery.company" :placeholder="'请选择经销商'">
+        <el-option v-for="item in  companies" :key="item._id" :label="item.title" :value="item._id">
+        </el-option>
+      </el-select>
+
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
-      <!-- <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">{{$t('table.add')}}</el-button>
-      <el-button class="filter-item" type="primary" :loading="downloadLoading" v-waves icon="el-icon-download" @click="handleDownload">{{$t('table.export')}}</el-button>
-      <el-checkbox class="filter-item" style='margin-left:15px;' @change='tableKey=tableKey+1' v-model="showReviewer">{{$t('table.reviewer')}}</el-checkbox> -->
     </div>
 
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" :label="$t('table.id')" width="240">
+      <!-- <el-table-column align="center" :label="$t('table.id')" width="240">
         <template slot-scope="scope">
           <span>{{scope.row._id}}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <!-- <el-table-column align="center" :label="$t('table.image')" width="160">
         <template slot-scope="scope">
           <img :src="scope.row.url" style="width:80px; height:60px"/>
         </template>
       </el-table-column> -->
-      <el-table-column width="200" align="center" :label="'发布时间'">
+
+
+      <el-table-column  :label="'职位名称'">
+        <template slot-scope="scope">
+          <span>{{scope.row.position.title}}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column  :label="'区域'" >
+        <template slot-scope="scope">
+         <span>{{scope.row.area.title}}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column  :label="'经销商'" width="300">
+        <template slot-scope="scope">
+         <span>{{scope.row.company.title}}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="200"  :label="'发布时间'">
         <template slot-scope="scope">
           <span>{{ new Date(scope.row.publish_date) | parseTime }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="110px" align="center" :label="'文章作者'">
-        <template slot-scope="scope">
-          <span>{{scope.row.author}}</span>
-        </template>
-      </el-table-column>
 
-      <el-table-column align="center" :label="'文章封面'" width="160">
+      <el-table-column align="center" :label="$t('table.actions')" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <img v-if="scope.row.cover_url" :src="scope.row.cover_url" style="width:80px; height:60px"/>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="110px" align="center" :label="'文章分类'">
-        <template slot-scope="scope">
-          <span >{{scope.row.type.title}}</span>
-        </template>
-      </el-table-column> 
-
-      <el-table-column min-width="150px" :label="'文章标题'">
-        <template slot-scope="scope">
-          <span>{{scope.row.title}}</span>
-          <!-- <el-tag>{{scope.row.type | typeFilter}}</el-tag> -->
-        </template>
-      </el-table-column>
-      <!-- <el-table-column width="80px" :label="$t('table.importance')">
-        <template slot-scope="scope">
-          <svg-icon v-for="n in +scope.row.importance" icon-class="star" class="meta-item__icon" :key="n"></svg-icon>
-        </template>
-      </el-table-column> -->
-      <!-- <el-table-column align="center" :label="$t('table.readings')" width="95">
-        <template slot-scope="scope">
-          <span v-if="scope.row.pageviews" class="link-type" @click='handleFetchPv(scope.row.pageviews)'>{{scope.row.pageviews}}</span>
-          <span v-else>0</span>
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col" :label="$t('table.status')" width="100">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{scope.row.status}}</el-tag>
-        </template>
-      </el-table-column> -->
-      <el-table-column align="center" :label="$t('table.actions')" width="230" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <router-link :to="'edit-article/'+scope.row._id" class="link-type" style="margin-right:20px" >编辑</router-link>
+          <!-- <router-link :to="'edit-article/'+scope.row._id" class="link-type" style="margin-right:20px" >编辑</router-link> -->
           <el-button type="danger" size="mini" @click="handleConfirmDelete(scope.row)">{{$t('table.delete')}}</el-button>
           <!-- <el-button v-if="scope.row.status!='published'" size="mini" type="success" @click="handleModifyStatus(scope.row,'published')">{{$t('table.publish')}}
           </el-button> -->
@@ -99,41 +84,6 @@
       </el-pagination>
     </div>
 
-    <!-- <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="70px" style='width: 400px; margin-left:50px;'>
-        <el-form-item :label="$t('table.type')" prop="type">
-          <el-select class="filter-item" v-model="temp.type" placeholder="Please select">
-            <el-option v-for="item in  calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('table.date')" prop="timestamp">
-          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item :label="$t('table.title')" prop="title">
-          <el-input v-model="temp.title"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('table.status')">
-          <el-select class="filter-item" v-model="temp.status" placeholder="Please select">
-            <el-option v-for="item in  statusOptions" :key="item" :label="item" :value="item">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('table.importance')">
-          <el-rate style="margin-top:8px;" v-model="temp.importance" :colors="['#99A9BF', '#F7BA2A', '#FF9900']" :max='3'></el-rate>
-        </el-form-item>
-        <el-form-item :label="$t('table.remark')">
-          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="Please input" v-model="temp.remark">
-          </el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
-        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">{{$t('table.confirm')}}</el-button>
-        <el-button v-else type="primary" @click="updateData">{{$t('table.confirm')}}</el-button>
-      </div>
-    </el-dialog> -->
 
     <el-dialog title="删除" :visible.sync="dialogDelete">
 
@@ -149,8 +99,10 @@
 </template>
 
 <script>
-import { fetchList, deleteArticle } from '@/api/article'
-import { fetchList as fetchCategory} from '@/api/category'
+import { fetchList as fetchCompany} from '@/api/company'
+import { fetchList as fetchArea} from '@/api/area'
+import { fetchList as fetchPosition} from '@/api/position'
+import { fetchList, deleteJob } from '@/api/job'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 
@@ -177,7 +129,7 @@ export default {
       tableKey: 0,
       list: null,
       total: null,
-      listLoading: true,
+      listLoading: false,
       currentRow: {},
       listQuery: {
         page: 1,
@@ -187,6 +139,9 @@ export default {
         // type: undefined,
         // sort: '+id'
       },
+      areas: [],
+      positions: [],
+      companies: [],
       importanceOptions: [1, 2, 3],
       typeOptions: {},
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
@@ -235,16 +190,9 @@ export default {
     }
   },
   created() {
-
-    fetchCategory({limit:100, page:0}).then(response => {
-        this.typeOptions = response.data.items;
-        this.getList()
-      }).catch(err => {
-        this.fetchSuccess = false
-        console.log(err)
-      })
-
-    
+    this.getArea()
+    this.getPosition()
+    this.getList()
   },
   methods: {
     getList() {
@@ -256,6 +204,51 @@ export default {
         self.listLoading = false
       })
     },
+
+    getArea(){
+        fetchArea({limit:100, page:0}).then(response => {
+          this.areas = response.data.items
+          this.getCompany()
+        }).catch(err => {
+          console.log(err)
+        })
+    },
+
+    getCompany() {
+        fetchCompany({area: this.listQuery.area}).then(response => {
+          if (response.data.error_code == 0) {
+              this.companies = response.data.items
+              if(this.companies.length>0){
+                //this.postForm.company = this.postForm.companies[0]._id
+                this.getPosition()
+              }else{
+                this.company = ""
+              }
+          } else {
+            alert('获取经销商失败!')
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+    },
+
+    getPosition() {
+        fetchPosition({}).then(response => {
+          if (response.data.error_code == 0) {
+              this.positions = response.data.items
+              if(this.positions.length>0){
+                //this.postForm.position = this.postForm.positions[0]._id
+              }else{
+                this.postForm.position = ""
+              }
+          } else {
+            alert('获取职位失败!')
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+    },
+
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
@@ -359,10 +352,10 @@ export default {
     },
     handleDelete(id) {
 
-      deleteArticle({ id: this.currentRow._id }).then(response => {
+      deleteJob({ id: this.currentRow._id }).then(response => {
         this.$notify({
           title: '成功',
-          message: '删除成功',
+          message: '职位已关闭',
           type: 'success',
           duration: 2000
         })
@@ -371,7 +364,7 @@ export default {
       }).catch(err => {
         this.$notify({
           title: '失败',
-          message: '删除失败',
+          message: '职位关闭失败',
           type: 'warning',
           duration: 2000
         })
